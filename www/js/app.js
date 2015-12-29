@@ -31,12 +31,20 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     templateUrl: 'templates/menu.html',
     controller: 'AppCtrl'
   })
-    .state('app.playlists', {
+    .state('app.courses', {
       url: '/courses',
       views: {
         'menuContent': {
           templateUrl: 'templates/courses.html',
           controller: 'CourseCtrl'
+        }
+      }
+    })
+    .state('app.submit', {
+      url: '/courses/:createDeck',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/createDeck.html'
         }
       }
     });

@@ -11,7 +11,9 @@ angular.module('starter.controllers', [])
   
 })
 
-.controller('CourseCtrl', function($scope) {
+.controller('CourseCtrl',['$location', function($scope) {
   
-});
+
+  
+}]);
 
