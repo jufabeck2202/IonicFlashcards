@@ -1,7 +1,13 @@
 <ion-view view-title="create new Deck">
   <ion-content>
-    <ion-list>
-      
+    <ion-list>  
+    <label class="item item-input">
+    <input type="text" placeholder="Enter Deck Name" ng-model="DeckName">
+  </label>
+ <a class="button button-full button-balanced" href="#/app/courses/createDeck/addCards" ng-show"DeckName">
+  Create {{DeckName}} Deck
+</a>
+
     </ion-list>
   </ion-content>
 </ion-view>

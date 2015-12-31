@@ -15,5 +15,15 @@ angular.module('starter.controllers', [])
   
 
   
-}]);
+}])
+.controller('CreateDeckCtrl',function($scope) {
+  
+
+  
+})
+.controller('AddCardsCtrl',function($scope) {
+  
+
+  
+});
 

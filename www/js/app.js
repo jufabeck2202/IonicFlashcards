@@ -40,11 +40,21 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         }
       }
     })
-    .state('app.submit', {
+    .state('app.createDeck', {
       url: '/courses/:createDeck',
       views: {
         'menuContent': {
-          templateUrl: 'templates/createDeck.html'
+          templateUrl: 'templates/createDeck.html',
+          controller: "CreateDeckCtrl"
+        }
+      }
+    })
+    .state('app.addCards', {
+      url: '/courses/:createDeck/:addCards',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/addCards.html',
+          controller: "AddCardsCtrl"
         }
       }
     });
