@@ -1,8 +1,13 @@
 <ion-view view-title="add Cards">
   <ion-content>
-    <ion-list>  
-   
-
+    <ion-list> 
+    <label class="item item-input"> 
+     <input type="text" placeholder="card frontside"ng-model="frontside.text">
+     </label>
+     <label class="item item-input"> 
+     <input type="text" placeholder="card backside" ng-model="backside.text">
+     </label>
+     <button class="button button-full button-balanced"> Save</button>
     </ion-list>
   </ion-content>
 </ion-view>

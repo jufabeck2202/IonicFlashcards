@@ -11,19 +11,27 @@ angular.module('starter.controllers', [])
   
 })
 
-.controller('CourseCtrl',['$location', function($scope) {
-  
+.controller('CourseCtrl',function($scope,DeckService) {
+  $scope.decks = DeckService.all();
 
   
-}])
-.controller('CreateDeckCtrl',function($scope) {
+})
+.controller('CreateDeckCtrl',function($scope,$stateParams) {
+  $scope.onSaveDeck = function(){
+    
+  }
+
+  
+})
+.controller('AddCardsCtrl',function($scope,$stateParams) {
+  console.log($stateParams);
   
 
   
 })
-.controller('AddCardsCtrl',function($scope) {
-  
-
+.controller('CardQueryCtrl',function($scope,$stateParams,DeckService) {
+  console.log($stateParams);
+  $scope.deck= DeckService.getByName($stateParams.cardQuery)
   
 });
 

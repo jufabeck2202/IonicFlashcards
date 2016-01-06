@@ -21,7 +21,32 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
   });
 })
+.factory("DeckService", function(){
 
+    var decks=[{
+      name:"TestDeck",
+      words:[{Haus:"house",know:false},{Pferd:"horse",know:false}] 
+        
+    }];
+    return{
+    all:function(){
+      return decks;
+    },
+    add:function(deck){
+      decks.push(deck);
+    },
+    getByName:function(name){
+      for (var i = decks.length - 1; i >= 0; i--) {
+        if (decks[i].name==name) {
+          return decks[i]
+        };
+      };
+      return null;
+    }
+  }
+
+  
+})
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
@@ -40,8 +65,17 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         }
       }
     })
+    .state('app.cardQuery', {
+      url: '/courses/:cardQuery',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/cardQuery.html',
+          controller: 'CardQueryCtrl'
+        }
+      }
+    })
     .state('app.createDeck', {
-      url: '/courses/:createDeck',
+      url: '/createDeck',
       views: {
         'menuContent': {
           templateUrl: 'templates/createDeck.html',
@@ -50,7 +84,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
     })
     .state('app.addCards', {
-      url: '/courses/:createDeck/:addCards',
+      url: '/createDeck/addCards',
       views: {
         'menuContent': {
           templateUrl: 'templates/addCards.html',
