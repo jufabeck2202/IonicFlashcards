@@ -25,7 +25,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
     var decks=[{
       name:"TestDeck",
-      words:[{Haus:"house",know:false},{Pferd:"horse",know:false}] 
+      words:[{frontside:"karte1",backside:"card1",know:false},
+      {frontside:"karte2",backside:"card2",know:false}] 
         
     }];
     return{
