@@ -13,7 +13,7 @@ angular.module('starter.controllers', [])
 
 .controller('CourseCtrl',function($scope,DeckService) {
   $scope.decks = DeckService.all();
-
+  
   
 })
 .controller('CreateDeckCtrl',function($scope,$stateParams) {
@@ -36,7 +36,7 @@ angular.module('starter.controllers', [])
 
   
 })
-.controller('CardQueryCtrl',function($scope,$stateParams,DeckService){ 
+.controller('CardQueryCtrl',function($scope,$stateParams,$ionicPopover,DeckService){ 
   $scope.deck= DeckService.getByName($stateParams.cardQuery);
   $scope.currentCard=1;//current card
   $scope.cardCount=$scope.deck.words.length;//counts of the cards in the Deck
@@ -60,6 +60,32 @@ angular.module('starter.controllers', [])
     }
 
   };
+  //popover
+   $ionicPopover.fromTemplateUrl('/templates/queryPopover.html', {
+    scope: $scope
+  }).then(function(popover) {
+    $scope.popover = popover;
+  });
+
+
+  $scope.openPopover = function($event) {
+    $scope.popover.show($event);
+  };
+  $scope.closePopover = function() {
+    $scope.popover.hide();
+  };
+  //Cleanup the popover when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.popover.remove();
+  });
+  // Execute action on hide popover
+  $scope.$on('popover.hidden', function() {
+    // Execute action
+  });
+  // Execute action on remove popover
+  $scope.$on('popover.removed', function() {
+    // Execute action
+  });
 
 
   
