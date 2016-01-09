@@ -4,7 +4,7 @@
     <label class="item item-input">
     <input type="text" placeholder="Enter Deck Name" ng-model="DeckName">
   </label>
- <a class="button button-full button-balanced" href="#/app/createDeck/addCards" ng-show"DeckName" ng-click="onSaveDeck()">
+ <a class="button button-full button-balanced" href="#/app/createDeck/{{DeckName}}" ng-show="DeckName" ng-click="onSaveDeck()">
   Create {{DeckName}} Deck
 </a>
 

@@ -36,7 +36,17 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     add:function(deck){
       decks.push(deck);
     },
+    update:function(deckname,deck){
+      for (var i = decks.length - 1; i >= 0; i--) {
+        if (decks[i].name==deckname) {          
+          decks.splice(i);
+          decks.push(deck);
+          break;
+        };
+      };
+    },
     getByName:function(name){
+
       for (var i = decks.length - 1; i >= 0; i--) {
         if (decks[i].name==name) {
           return decks[i]
@@ -85,7 +95,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
     })
     .state('app.addCards', {
-      url: '/createDeck/addCards',
+      url: '/createDeck/:addCards',
       views: {
         'menuContent': {
           templateUrl: 'templates/addCards.html',

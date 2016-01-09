@@ -16,22 +16,52 @@ angular.module('starter.controllers', [])
   
   
 })
-.controller('CreateDeckCtrl',function($scope,$stateParams) {
+.controller('CreateDeckCtrl',function($scope,$stateParams,DeckService) {
+  
+  //creates empty deck with the right name and stores it in the DeckService
   $scope.onSaveDeck = function(){
-    
+    var deck={
+      name:this.DeckName,
+      words: new Array()//creates empty array template
+
+    }
+    DeckService.add(deck);
+
   }
 
   
 })
-.controller('AddCardsCtrl',function($scope,$state,$ionicHistory) {
+.controller('AddCardsCtrl',function($scope,$state,$ionicHistory,$stateParams,DeckService) {
   //function to go to the next view without a back button -> nice  approach :D
+  $scope.deckName=$stateParams.addCards
   $scope.closeDeck=function(){
     $ionicHistory.nextViewOptions({
       disableBack: true
     });
     $state.go("app.courses");
-
   }
+
+  
+  //
+  $scope.currentDeck=DeckService.getByName($scope.deckName);
+
+  $scope.addCard=function() {
+    if(this.frontside!=null&&this.backside!=null){
+      var word={
+        frontside:this.frontside.text,
+        backside:this.backside.text,
+        know:false
+      };
+      $scope.currentDeck.words.push(word);
+      console.log($scope.currentDeck);
+      DeckService.update($scope.deckName,$scope.currentDeck);
+      this.frontside.text=null;                
+      this.backside.text=null;
+      this.frontside=null;                
+      this.backside=null;
+    }
+  }
+  
   
 
   
@@ -66,8 +96,21 @@ angular.module('starter.controllers', [])
   }).then(function(popover) {
     $scope.popover = popover;
   });
+  //popover functions for shuffle switch edit and delete
+  $scope.shuffleCards=function() {
+    $scope.popover.hide();
+  }
+  $scope.switchCards=function() {
+    $scope.popover.hide();
+  }
+  $scope.editCard=function() {
+    $scope.popover.hide();
+  }
+  $scope.deleteCard=function() {
+    $scope.popover.hide();
+  }  
 
-
+  //normal popover function, called to close and hide the popover.
   $scope.openPopover = function($event) {
     $scope.popover.show($event);
   };

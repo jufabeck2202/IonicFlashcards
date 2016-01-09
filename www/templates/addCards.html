@@ -1,4 +1,4 @@
-<ion-view view-title="add Cards">
+<ion-view view-title="add Cards to {{deckName}}">
   <ion-content>
     <ion-list> 
     <label class="item item-input"> 
@@ -7,8 +7,8 @@
      <label class="item item-input"> 
      <input type="text" placeholder="card backside" ng-model="backside.text">
      </label>
-     <button class="button button-full button-balanced"> Save</button>
-     <button class="button button-full button-balanced"ng-click="closeDeck()"> Save Deck</button>
+     <button class="button button-full button-balanced" ng-click="addCard()"> add Card</button>
+     <button class="button button-full button-balanced"ng-click="closeDeck()">close and save Deck</button>
     </ion-list>
   </ion-content>
 </ion-view>
