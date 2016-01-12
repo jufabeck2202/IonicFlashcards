@@ -16,6 +16,22 @@ angular.module('starter.controllers', [])
   
   
 })
+
+.controller('CourseInfoCtrl',function($scope,DeckService,$stateParams) {
+  $scope.deck= DeckService.getByName($stateParams.deckName);
+  $scope.learnedCount = DeckService.getLearnedCount($scope.deck.name);
+
+  //set the right icon
+  $scope.getIcon=function(know){
+    if(know==false){
+      return "ion-android-radio-button-off";
+    }else{
+      return "ion-android-checkmark-circle balanced";
+    }
+  };
+  
+  
+})
 .controller('CreateDeckCtrl',function($scope,$stateParams,DeckService) {
   
   //creates empty deck with the right name and stores it in the DeckService
@@ -61,7 +77,7 @@ angular.module('starter.controllers', [])
       this.backside=null;
     }
   }
-  
+
   
 
   

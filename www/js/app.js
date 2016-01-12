@@ -25,7 +25,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
     var decks=[{
       name:"TestDeck",
-      words:[{frontside:"karte1",backside:"card1",know:false},
+      words:[{frontside:"karte1",backside:"card1",know:true},
       {frontside:"karte2",backside:"card2",know:false}] 
         
     }];
@@ -46,10 +46,24 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       };
     },
     getByName:function(name){
-
       for (var i = decks.length - 1; i >= 0; i--) {
         if (decks[i].name==name) {
           return decks[i]
+        };
+      };
+      return null;
+    },
+    getLearnedCount:function(name){
+      for (var i = decks.length - 1; i >= 0; i--) {
+        if (decks[i].name==name) {
+          var count =0;
+          for (var j = 0; j< decks[i].words.length;j++) {
+            if(decks[i].words[j].know==true){
+             
+              count++;
+            }            
+          };
+          return count;
         };
       };
       return null;
@@ -77,11 +91,20 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
     })
     .state('app.cardQuery', {
-      url: '/courses/:cardQuery',
+      url: '/courses/:deckName/:cardQuery',
       views: {
         'menuContent': {
           templateUrl: 'templates/cardQuery.html',
           controller: 'CardQueryCtrl'
+        }
+      }
+    })
+    .state('app.courseInfo', {
+      url: '/courses/:deckName',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/courseInfo.html',
+          controller: 'CourseInfoCtrl'
         }
       }
     })
