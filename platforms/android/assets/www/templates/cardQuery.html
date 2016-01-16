@@ -1,0 +1,15 @@
+<ion-view view-title="{{deck.name}} {{currentCard}}/{{cardCount}}">
+<ion-nav-buttons side="right">
+	<button class="button button-icon icon ion-android-settings" ng-click="openPopover($event)"></button>
+</ion-nav-buttons>
+  <ion-content class="padding" on-swipe-tight="onSwitchBack()" on-swipe-left="onSwitch()">
+  {{displayWord}}
+
+  </ion-content>
+ 
+<div class="bar bar-footer">
+<footer class="button-bar">
+  <a class="button button-balanced icon ion-android-done"> RIGHT</a>
+</div>
+</ion-view>
+

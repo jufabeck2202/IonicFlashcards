@@ -4,7 +4,9 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
+var db = null;
+'use strict';
+angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -26,26 +28,28 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     var decks=[{
       name:"TestDeck",
       words:[{frontside:"karte1",backside:"card1",know:true},
-      {frontside:"karte2",backside:"card2",know:false}] 
-        
+      {frontside:"karte2",backside:"card2",know:false}]
+
     }];
     return{
     all:function(){
       return decks;
+
     },
     add:function(deck){
       decks.push(deck);
     },
     update:function(deckname,deck){
       for (var i = decks.length - 1; i >= 0; i--) {
-        if (decks[i].name==deckname) {          
+        if (decks[i].name==deckname) {
           decks.splice(i);
           decks.push(deck);
           break;
         };
       };
     },
-    getByName:function(name){
+    //returns deck with the given name
+    getDeckByName:function(name){
       for (var i = decks.length - 1; i >= 0; i--) {
         if (decks[i].name==name) {
           return decks[i]
@@ -59,9 +63,9 @@ angular.module('starter', ['ionic', 'starter.controllers'])
           var count =0;
           for (var j = 0; j< decks[i].words.length;j++) {
             if(decks[i].words[j].know==true){
-             
+
               count++;
-            }            
+            }
           };
           return count;
         };
@@ -70,7 +74,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
   }
 
-  
+
 })
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -96,6 +100,15 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         'menuContent': {
           templateUrl: 'templates/cardQuery.html',
           controller: 'CardQueryCtrl'
+        }
+      }
+    })
+    .state('app.editCard', {
+      url: '/courses/:deckName/:cardQuery/:cardname',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/editCard.html',
+          controller: 'EditCardCtrl'
         }
       }
     })

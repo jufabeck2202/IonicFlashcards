@@ -1,26 +1,27 @@
 <ion-view view-title="{{deck.name}}">
  <ion-content>
- 	<div class="button-bar">
-  		<a class="button button-balanced" 
-  		href="#/app/courses/{{deck.name}}/{{deck.name}}">All-{{deck.words.length}}</a>
-  		<a class="button button-balanced">
-  			Learned-{{learnedCount}}/{{deck.words.length}}</a>
-  		<a class="button button-balanced">to learn</a>
-	</div>
-	
   	<div class="list">
-  		<ion-item class = "item-icon-left"ng-repeat="word in deck.words">
+      <div class="button-bar">
+      		<a class="button button-balanced"
+      		href="#/app/courses/{{deck.name}}/{{deck
+          .name}}-0">All-{{deck.words.length}}</a>
+      		<a class="button button-balanced" href="#/app/courses/{{deck.name}}/{{deck.name}}-1">
+      			Learned-{{getLearnedCount()}}/{{deck.words.length}}</a>
+      		<a class="button button-balanced"href="#/app/courses/{{deck.name}}/{{deck.name}}-2" >to learn</a>
+    	</div>
+
+  		<ion-item class = "item-icon-left"ng-repeat="word in deck.words" href="#/app/courses/{{deck.name}}/{{deck.name}}/{{word.frontside}}">
   		 <i class="icon {{getIcon(word.know)}}"></i>
   			<h2>{{word.frontside}}</h2>
-      		<p>{{word.backside}}</p>    		 
-    	
+      		<p>{{word.backside}}</p>
+
   		</ion-item>
 
   	</div>
 
 
-  	
-	
+
+
 
 </ion-content>
 <div class="bar bar-footer">
@@ -28,12 +29,12 @@
   <a class="tab-item" href="#/app/createDeck/{{deck.name}}">
    	<i class="icon ion-android-add"></i>
     add Card
-  </a>  
-  <a class="tab-item">
+  </a>
+  <a class="tab-item" ng-click="refreshDeck()">
     <i class="icon ion-android-refresh"></i>
     Reset
   </a>
-  <a class="tab-item">
+  <a class="tab-item" ng-click ="deleteDeck()">
     <i class="icon ion-trash-b assertive"></i>
     Delete Deck
   </a>
