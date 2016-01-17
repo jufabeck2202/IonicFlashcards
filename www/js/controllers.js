@@ -26,10 +26,15 @@ angular.module('starter.controllers', [])
 
 })
 
+
+
 .controller('CourseCtrl',function($scope,DeckService) {
   $scope.decks = DeckService.all();
 
 })
+
+
+
 .controller('EditCardCtrl',function($scope,DeckService ,$stateParams ,$state) {
   console.log($stateParams);
   $scope.Deckname = $stateParams.deckName;
@@ -48,15 +53,16 @@ angular.module('starter.controllers', [])
   $scope.frontside=word.frontside;
   $scope.backside=word.backside;
 
-  //gets called when you save the card changes
+  //gets called when you edit the word
   $scope.save=function(){
     $scope.deck.words[wordIndex].frontside=this.frontside;
     $scope.deck.words[wordIndex].backside=this.backside;
-    $state.go("app.courseInfo",$stateParams);
-    
+
+
   }
 
 })
+
 
 
 .controller('CourseInfoCtrl',function($scope, $state,DeckService,$stateParams,$cordovaSQLite) {
@@ -91,6 +97,9 @@ angular.module('starter.controllers', [])
 
   }
 })
+
+
+
 .controller('CreateDeckCtrl',function($scope,$stateParams,DeckService) {
 
   //creates empty deck with the right name and stores it in the DeckService
@@ -104,6 +113,9 @@ angular.module('starter.controllers', [])
 
 
 })
+
+
+
 .controller('AddCardsCtrl',function($scope,$state,$ionicHistory,$stateParams,DeckService) {
   //function to go to the next view without a back button -> nice  approach :D
   $scope.deckName=$stateParams.addCards
@@ -134,11 +146,10 @@ angular.module('starter.controllers', [])
       this.backside=null;
     }
   }
-
-
-
-
 })
+
+
+
 .controller('CardQueryCtrl',function($scope,$stateParams,$state,$ionicPopover,DeckService){
   var param = $stateParams.cardQuery.split("-");
   var DeckName = param[0];
@@ -203,7 +214,6 @@ angular.module('starter.controllers', [])
       };
     };
   }
-
   //popover
    $ionicPopover.fromTemplateUrl('/templates/queryPopover.html', {
     scope: $scope
@@ -243,7 +253,4 @@ angular.module('starter.controllers', [])
   $scope.$on('popover.removed', function() {
     // Execute action
   });
-
-
-
 });
