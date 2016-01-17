@@ -57,6 +57,14 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
       };
       return null;
     },
+    getDeckIndex:function(name){
+      for (var i = decks.length - 1; i >= 0; i--) {
+        if (decks[i].name==name) {
+          return i;
+        };
+      };
+      return null;
+    },
     getLearnedCount:function(name){
       for (var i = decks.length - 1; i >= 0; i--) {
         if (decks[i].name==name) {

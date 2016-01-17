@@ -10,7 +10,7 @@
       		<a class="button button-balanced"href="#/app/courses/{{deck.name}}/{{deck.name}}-2" >to learn</a>
     	</div>
 
-  		<ion-item class = "item-icon-left"ng-repeat="word in deck.words" href="#/app/courses/{{deck.name}}/{{deck.name}}/{{word.frontside}}">
+  		<ion-item class = "item-icon-left" ng-repeat="word in deck.words" href="#/app/courses/{{deck.name}}/{{deck.name}}/{{word.frontside}}">
   		 <i class="icon {{getIcon(word.know)}}"></i>
   			<h2>{{word.frontside}}</h2>
       		<p>{{word.backside}}</p>
@@ -34,7 +34,7 @@
     <i class="icon ion-android-refresh"></i>
     Reset
   </a>
-  <a class="tab-item" ng-click ="deleteDeck()">
+  <a class="tab-item" ng-click ="showConfirm()">
     <i class="icon ion-trash-b assertive"></i>
     Delete Deck
   </a>

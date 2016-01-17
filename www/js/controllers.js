@@ -35,8 +35,8 @@ angular.module('starter.controllers', [])
 
 
 
-.controller('EditCardCtrl',function($scope,DeckService ,$stateParams ,$state) {
-  console.log($stateParams);
+.controller('EditCardCtrl',function($ionicPopup,$scope,DeckService ,$stateParams ,$state) {
+  //TODO change know state
   $scope.Deckname = $stateParams.deckName;
   $scope.cardFrontside=$stateParams.cardname;
   $scope.deck=DeckService.getDeckByName($scope.Deckname);
@@ -57,17 +57,28 @@ angular.module('starter.controllers', [])
   $scope.save=function(){
     $scope.deck.words[wordIndex].frontside=this.frontside;
     $scope.deck.words[wordIndex].backside=this.backside;
-
-
   }
+  $scope.showConfirm = function() {
+   var confirmPopup = $ionicPopup.confirm({
+     title: 'Delete card',
+     template: 'Are you sure?'
+   });
+   confirmPopup.then(function(res) {
+     if(res) {
+       $scope.deck.words.splice(wordIndex,wordIndex+1);
+       console.log(DeckService.all());
+     }
+   });
+ }
+
 
 })
 
 
 
-.controller('CourseInfoCtrl',function($scope, $state,DeckService,$stateParams,$cordovaSQLite) {
+.controller('CourseInfoCtrl',function($scope,$ionicPopup, $state,DeckService,$stateParams,$cordovaSQLite) {
   $scope.deck= DeckService.getDeckByName($stateParams.deckName);
-
+  $scope.DeckIndex=DeckService.getDeckIndex($scope.deck.name);
   $scope.getLearnedCount=function(){
     return DeckService.getLearnedCount($scope.deck.name);
   }
@@ -82,12 +93,18 @@ angular.module('starter.controllers', [])
   };
 
   //deletes the deck
-  $scope.deleteDeck=function(){
-    if(confirm("please confirm to delete "+$scope.deck.name)){
-      DeckService.all().splice(DeckService.getDeckByName($scope.deck.name))
-      $state.go("app.courses");
-    }
-  }
+  $scope.showConfirm = function() {
+    var confirmPopup = $ionicPopup.confirm({
+     title: 'Delete Deck',
+     template: 'Are you sure?'
+   });
+   confirmPopup.then(function(res) {
+     if(res) {
+       DeckService.all().splice($scope.DeckIndex,$scope.DeckIndex+1);
+       $state.go("app.courses");
+     }
+   });
+ }
 
   //resetes all know states
   $scope.refreshDeck=function(){
@@ -202,6 +219,8 @@ angular.module('starter.controllers', [])
     }
   };
   //gets called when you click the knwo button and changes the state
+  //TODO: add back function, indicate know state
+  //-> maybe rewrite complete
   $scope.changeKnow= function(){
     var tempcard=$scope.selectedWords[$scope.currentCard-1];
     for (var i = 0; i < $scope.deck.words.length; i++) {
