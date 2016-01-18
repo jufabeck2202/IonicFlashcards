@@ -70,13 +70,12 @@ angular.module('starter.controllers', [])
      }
    });
  }
-
-
 })
 
 
 
 .controller('CourseInfoCtrl',function($scope,$ionicPopup, $state,DeckService,$stateParams,$cordovaSQLite) {
+  //TODO: http://ionicframework.com/docs/api/directive/ionCheckbox/ -> add this to know
   $scope.deck= DeckService.getDeckByName($stateParams.deckName);
   $scope.DeckIndex=DeckService.getDeckIndex($scope.deck.name);
   $scope.getLearnedCount=function(){
@@ -111,7 +110,6 @@ angular.module('starter.controllers', [])
     for (var i = 0; i < $scope.deck.words.length; i++) {
       $scope.deck.words[i].know=false
     };
-
   }
 })
 
@@ -168,77 +166,60 @@ angular.module('starter.controllers', [])
 
 
 .controller('CardQueryCtrl',function($scope,$stateParams,$state,$ionicPopover,DeckService){
+  //TODO return the mulitble states, ex learn etc
   var param = $stateParams.cardQuery.split("-");
   var DeckName = param[0];
-  $scope.names=param[0];
   var DeckState= param[1]; //0-> all; 1-> learned; 2-> to learn
+  $scope.names=param[0];
   $scope.deck= DeckService.getDeckByName(param[0]);
-  $scope.currentCard=1;//current card, be carefull, when to use in array -1!
   $scope.done=false;
-  $scope.selectedWords=getSelectedCard();
-  $scope.cardCount=$scope.selectedWords.length;
-  $scope.displayWord=$scope.selectedWords[$scope.currentCard-1].frontside;
+  $scope.index = 0;
+  $scope.currentCard =$scope.deck.words[$scope.index];
+  $scope.showBothSides=true; //immer das gegenteil von dem was gerade gezeigt wird
 
-  //function to select the right words, for example learned or to learn
-  function getSelectedCard() {
-    if(DeckState ==0){
-      return $scope.deck.words;
-    }else if (DeckState==1) {
-      var words=[];
-      for (var i = 0; i < $scope.deck.words.length; i++) {
-        if ($scope.deck.words[i].know==true) {
-          words.push($scope.deck.words[i]);
-        }
-      }
-      return words;
-    }else if (DeckState==2) {
-      var words=[];
-      for (var i = 0; i < $scope.deck.words.length; i++) {
-        if ($scope.deck.words[i].know==false) {
-          words.push($scope.deck.words[i]);
-        }
-      }
-      return words;
-    }
-  }
 
-  var currentSide="frontside";
-  $scope.onSwitch=function(){ //funktion when to turn the card
-    if(!$scope.done){
-      if(currentSide=="frontside"){
-        currentSide="backside";
-        $scope.displayWord=$scope.selectedWords[$scope.currentCard-1].backside;
-        if($scope.currentCard==$scope.selectedWords.length){
-          $scope.done=true;
-        }
-      }else{
-        currentSide="frontside";
-        $scope.currentCard++;
-        $scope.displayWord=$scope.selectedWords[$scope.currentCard-1].frontside;
-      }
-    }
-  };
-  //gets called when you click the knwo button and changes the state
-  //TODO: add back function, indicate know state
-  //-> maybe rewrite complete
+
+
+
   $scope.changeKnow= function(){
-    var tempcard=$scope.selectedWords[$scope.currentCard-1];
-    for (var i = 0; i < $scope.deck.words.length; i++) {
-      if($scope.deck.words[i].frontside==tempcard.frontside){
-        if($scope.deck.words[i].know==true){
-          $scope.deck.words[i].know=false;
-        }else {
-            $scope.deck.words[i].know=true;
-        }
-      };
-    };
+    if($scope.currentCard.know==true){
+      $scope.currentCard.know=false;
+    }else{
+      $scope.currentCard.know=true;
+    }
   }
+
+  $scope.getKnowColor=function(){
+    if($scope.currentCard.know==true){
+      return "button-balanced";
+    }else{
+      return "button-outline ";
+    }
+  }
+
+  $scope.slideChanged=function(index){
+    $scope.showBothSides=true;
+    $scope.index = index;
+    $scope.currentCard =$scope.deck.words[$scope.index];
+
+  }
+
+  $scope.showBack=function(){
+    if($scope.showBothSides){
+      $scope.showBothSides=false;
+    }else{
+      $scope.showBothSides=true;
+    }
+  }
+
+
   //popover
    $ionicPopover.fromTemplateUrl('/templates/queryPopover.html', {
     scope: $scope
   }).then(function(popover) {
     $scope.popover = popover;
   });
+
   //popover functions for shuffle switch edit and delete
   $scope.shuffleCards=function() {
     //$scope.popover.hide();

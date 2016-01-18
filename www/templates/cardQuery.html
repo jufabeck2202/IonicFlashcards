@@ -1,23 +1,26 @@
-<ion-view view-title="{{deck.name}} {{currentCard}}/{{cardCount}}">
+<ion-view view-title="{{deck.name}}">
 <ion-nav-buttons side="right">
 	<button class="button button-icon icon ion-android-settings" ng-click="openPopover($event)"></button>
 </ion-nav-buttons>
-  <ion-content class="padding" on-swipe-right="onSwitchBack()" on-swipe-left="onSwitch()">
-		<div class="card">
-  <div class="item item-text-wrap">
-      {{displayWord}}
-  </div>
-	<div class="item item-text-wrap">
-      Das ist dann die rückseite
-  </div>
-</div>
-
-
-  </ion-content>
-
+<ion-content class="padding">
+	<ion-slide-box class="padding" on-slide-changed="slideChanged(index)" ng-click="showBack()">
+		<ion-slide ng-repeat="word in deck.words">
+			<div class="card">
+	  		<div class="item item-text-wrap">
+	      	{{word.frontside}}
+	  		</div>
+			</div>
+			<div class="card animated fadeInLeft" style="padding-top: 15%" ng-hide="showBothSides">
+	  		<div class="item item-text-wrap " >
+	      	{{word.backside}}
+	  		</div>
+			</div>
+		</ion-slide>
+  </ion-slide-box>
+</ion-content>
 <div class="bar bar-footer">
 <footer class="button-bar">
-  <a class="button button-balanced icon ion-android-done" ng-click="changeKnow()"> RIGHT</a>
+  <a class="button {{getKnowColor()}} icon ion-android-done" ng-click="changeKnow()"> RIGHT</a>
 	<a class="button button-balanced icon ion-android-done" href="#/app/courses/{{names}}" > CLOSE</a>
 </div>
 </ion-view>
