@@ -35,7 +35,7 @@ angular.module('starter.controllers', [])
 
 
 
-.controller('EditCardCtrl',function($ionicPopup,$scope,DeckService ,$stateParams ,$state) {
+.controller('EditCardCtrl',function($ionicHistory,$ionicPopup,$scope,DeckService ,$stateParams ,$state) {
   //TODO change know state
   $scope.Deckname = $stateParams.deckName;
   $scope.cardFrontside=$stateParams.cardname;
@@ -53,7 +53,7 @@ angular.module('starter.controllers', [])
   $scope.frontside=word.frontside;
   $scope.backside=word.backside;
 
-  //gets called when you edit the word
+
   $scope.save=function(){
     $scope.deck.words[wordIndex].frontside=this.frontside;
     $scope.deck.words[wordIndex].backside=this.backside;
@@ -66,7 +66,7 @@ angular.module('starter.controllers', [])
    confirmPopup.then(function(res) {
      if(res) {
        $scope.deck.words.splice(wordIndex,wordIndex+1);
-       console.log(DeckService.all());
+      $ionicHistory.goBack();
      }
    });
  }
@@ -100,7 +100,6 @@ angular.module('starter.controllers', [])
    confirmPopup.then(function(res) {
      if(res) {
        DeckService.all().splice($scope.DeckIndex,$scope.DeckIndex+1);
-       $state.go("app.courses");
      }
    });
  }
@@ -134,12 +133,19 @@ angular.module('starter.controllers', [])
 .controller('AddCardsCtrl',function($scope,$state,$ionicHistory,$stateParams,DeckService) {
   //function to go to the next view without a back button -> nice  approach :D
   $scope.deckName=$stateParams.addCards
+  console.log($stateParams);
+
   $scope.closeDeck=function(){
-    $ionicHistory.nextViewOptions({
-      disableBack: true
-    });
-    $state.go("app.courses");
-    //TODO direct directly to the course
+    if($ionicHistory.backTitle()=="create new Deck"){
+      $ionicHistory.nextViewOptions({
+        disableBack: true,
+        disableAnimate:true
+      });
+      $state.go('app.courses');
+    }else{
+    $ionicHistory.goBack();
+
+    }
   }
 
   //
