@@ -27,8 +27,12 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
 
     var decks=[{
       name:"TestDeck",
-      words:[{frontside:"karte1",backside:"card1",know:true},
-      {frontside:"karte2",backside:"card2",know:false}]
+      words:[
+      {frontside:"karte1",backside:"card1",know:true,pos:1},
+      {frontside:"karte2",backside:"card2",know:false,pos:3},
+      {frontside:"karte3",backside:"card3",know:false,pos:4},
+      {frontside:"karte4",backside:"card4",know:false,pos:2},
+      {frontside:"karte5",backside:"card5",know:false,pos:0}]
 
     }];
     return{

@@ -100,6 +100,7 @@ angular.module('starter.controllers', [])
    confirmPopup.then(function(res) {
      if(res) {
        DeckService.all().splice($scope.DeckIndex,$scope.DeckIndex+1);
+       $state.go("app.courses");
      }
    });
  }
@@ -156,7 +157,8 @@ angular.module('starter.controllers', [])
       var word={
         frontside:this.frontside.text,
         backside:this.backside.text,
-        know:false
+        know:false,
+        pos:null
       };
       $scope.currentDeck.words.push(word);
       console.log($scope.currentDeck);
@@ -178,14 +180,62 @@ angular.module('starter.controllers', [])
   var DeckState= param[1]; //0-> all; 1-> learned; 2-> to learn
   $scope.names=param[0];
   $scope.deck= DeckService.getDeckByName(param[0]);
-  $scope.done=false;
+  //function die die richtigen wörter auswählt
+  $scope.getWords = function(){
+    if(DeckState==0){
+      return $scope.deck.words;
+    }else if (DeckState==1) {
+      var selectedWords=[];
+      for (var i = 0; i < $scope.deck.words.length; i++) {
+        if($scope.deck.words[i].know==true){
+          selectedWords.push($scope.deck.words[i]);
+        }
+      }
+      return selectedWords;
+    }else if (DeckState==2) {
+      var selectedWords=[];
+      for (var i = 0; i < $scope.deck.words.length; i++) {
+        if($scope.deck.words[i].know==false){
+          selectedWords.push($scope.deck.words[i]);
+        }
+      }
+      return selectedWords;
+    }
+  }
+
   $scope.index = 0;
-  $scope.currentCard =$scope.deck.words[$scope.index];
+  $scope.currentSelectedWords=$scope.getWords();
+
+  //reset of the id in beginn of the view
+  for (var i = $scope.currentSelectedWords.length-1; i >=0; i--) {
+    $scope.currentSelectedWords[i].pos=i;
+    console.log($scope.currentSelectedWords[i].pos);
+  }
+//return the card with the matching pos
+  $scope.posHandler = function(pos){
+    for (var i = 0; i < $scope.currentSelectedWords.length; i++) {
+      if($scope.currentSelectedWords[i].pos==pos){
+          return $scope.currentSelectedWords[i];
+      }
+    }
+  }
+  $scope.currentCard =$scope.posHandler($scope.index);
   $scope.showBothSides=true; //immer das gegenteil von dem was gerade gezeigt wird
+  $scope.shuffle=false;
+  $scope.switch=false;
+  $scope.cardTop=null;
+  $scope.cardBottom=null;
 
-
-
-
+  var setWords = function(){
+    if($scope.switch==false){
+      $scope.cardTop=$scope.currentCard.frontside;
+      $scope.cardBottom=$scope.currentCard.backside;
+    }else {
+      $scope.cardTop=$scope.currentCard.backside;
+      $scope.cardBottom=$scope.currentCard.frontside;
+    }
+  };
+  setWords();
 
   $scope.changeKnow= function(){
     if($scope.currentCard.know==true){
@@ -202,11 +252,15 @@ angular.module('starter.controllers', [])
       return "button-outline ";
     }
   }
-
+  //functions gets called when you slide,
+  //sets the index and resets the bottom card
+  //->updates everything.
   $scope.slideChanged=function(index){
     $scope.showBothSides=true;
     $scope.index = index;
-    $scope.currentCard =$scope.deck.words[$scope.index];
+
+    $scope.currentCard = $scope.posHandler($scope.index);
+    setWords();
 
   }
 
@@ -228,16 +282,16 @@ angular.module('starter.controllers', [])
 
   //popover functions for shuffle switch edit and delete
   $scope.shuffleCards=function() {
-    //$scope.popover.hide();
+    $scope.popover.hide();
   }
   $scope.switchCards=function() {
-    //$scope.popover.hide();
-  }
-  $scope.editCard=function() {
-    //$scope.popover.hide();
-  }
-  $scope.deleteCard=function() {
-    //$scope.popover.hide();
+    $scope.popover.hide();
+    if($scope.switch){
+      $scope.switch=false;
+    }else{
+      $scope.switch=true;
+    }
+    setWords()
   }
 
   //normal popover function, called to close and hide the popover.

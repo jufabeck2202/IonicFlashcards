@@ -5,10 +5,10 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 var db = null;
-
+'use strict';
 angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
 
-.run(function($ionicPlatform, $cordovaSQLite) {
+.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -21,42 +21,50 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
-    db = $cordovaSQLite.openDB({name: "decks.db"});
-    $cordovaSQLite.excute(db,"CREATE TABLE IF NOT EXISTS(id integer primary key,frontside text, backside text, know boolean)");
-    
-
-
-
   });
 })
 .factory("DeckService", function(){
 
     var decks=[{
       name:"TestDeck",
-      words:[{frontside:"karte1",backside:"card1",know:true},
-      {frontside:"karte2",backside:"card2",know:false}] 
-        
+      words:[
+      {frontside:"karte1",backside:"card1",know:true,pos:null},
+      {frontside:"karte2",backside:"card2",know:false,pos:null},
+      {frontside:"karte3",backside:"card3",know:false,pos:null},
+      {frontside:"karte4",backside:"card4",know:false,pos:null},
+      {frontside:"karte5",backside:"card5",know:false,pos:null}]
+
     }];
     return{
     all:function(){
       return decks;
+
     },
     add:function(deck){
       decks.push(deck);
     },
     update:function(deckname,deck){
       for (var i = decks.length - 1; i >= 0; i--) {
-        if (decks[i].name==deckname) {          
+        if (decks[i].name==deckname) {
           decks.splice(i);
           decks.push(deck);
           break;
         };
       };
     },
-    getByName:function(name){
+    //returns deck with the given name
+    getDeckByName:function(name){
       for (var i = decks.length - 1; i >= 0; i--) {
         if (decks[i].name==name) {
           return decks[i]
+        };
+      };
+      return null;
+    },
+    getDeckIndex:function(name){
+      for (var i = decks.length - 1; i >= 0; i--) {
+        if (decks[i].name==name) {
+          return i;
         };
       };
       return null;
@@ -67,9 +75,9 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
           var count =0;
           for (var j = 0; j< decks[i].words.length;j++) {
             if(decks[i].words[j].know==true){
-             
+
               count++;
-            }            
+            }
           };
           return count;
         };
@@ -78,7 +86,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
     }
   }
 
-  
+
 })
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -104,6 +112,15 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
         'menuContent': {
           templateUrl: 'templates/cardQuery.html',
           controller: 'CardQueryCtrl'
+        }
+      }
+    })
+    .state('app.editCard', {
+      url: '/courses/:deckName/:cardQuery/:cardname',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/editCard.html',
+          controller: 'EditCardCtrl'
         }
       }
     })

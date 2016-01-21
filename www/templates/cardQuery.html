@@ -4,15 +4,14 @@
 </ion-nav-buttons>
 <ion-content class="padding">
 	<ion-slide-box class="padding" on-slide-changed="slideChanged(index)" ng-click="showBack()">
-		<ion-slide ng-repeat="word in deck.words">
+		<ion-slide ng-repeat="word in currentSelectedWords">
 			<div class="card">
 	  		<div class="item item-text-wrap">
-	      	{{word.frontside}}
+	      	{{cardTop}}
 	  		</div>
 			</div>
 			<div class="card animated fadeInLeft" style="padding-top: 15%" ng-hide="showBothSides">
 	  		<div class="item item-text-wrap " >
-	      	{{word.backside}}
 	  		</div>
 			</div>
 		</ion-slide>

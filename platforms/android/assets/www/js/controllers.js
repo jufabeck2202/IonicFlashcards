@@ -1,5 +1,20 @@
 angular.module('starter.controllers', [])
 
+.directive('ngEnter', function () {
+
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.ngEnter);
+                });
+
+                event.preventDefault();
+            }
+        });
+    };
+})
+
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
   // With the new view caching in Ionic, Controllers are only called
@@ -8,24 +23,65 @@ angular.module('starter.controllers', [])
   // listen for the $ionicView.enter event:
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-  
+
 })
+
+
 
 .controller('CourseCtrl',function($scope,DeckService) {
   $scope.decks = DeckService.all();
-  
-  
+
 })
 
-.controller('CourseInfoCtrl',function($scope,DeckService,$stateParams,$cordovaSQLite) {
-  $scope.deck= DeckService.getByName($stateParams.deckName);
-  $scope.learnedCount = DeckService.getLearnedCount($scope.deck.name);
 
-  $scope.getDeck=function(){
-    var query = "SELECT name FROM my_db.sqlite_master WHERE type='table'";
-  
-  };
-  $scope.getDeck();
+
+.controller('EditCardCtrl',function($ionicHistory,$ionicPopup,$scope,DeckService ,$stateParams ,$state) {
+  //TODO change know state
+  $scope.Deckname = $stateParams.deckName;
+  $scope.cardFrontside=$stateParams.cardname;
+  $scope.deck=DeckService.getDeckByName($scope.Deckname);
+  var wordIndex=null;
+  var getWord = function() {
+    for (var i = 0; i < $scope.deck.words.length; i++) {
+      if($scope.deck.words[i].frontside==$scope.cardFrontside){
+        wordIndex=i;
+        return $scope.deck.words[i];
+      };
+    };
+  }
+ var word=getWord();
+  $scope.frontside=word.frontside;
+  $scope.backside=word.backside;
+
+
+  $scope.save=function(){
+    $scope.deck.words[wordIndex].frontside=this.frontside;
+    $scope.deck.words[wordIndex].backside=this.backside;
+  }
+  $scope.showConfirm = function() {
+   var confirmPopup = $ionicPopup.confirm({
+     title: 'Delete card',
+     template: 'Are you sure?'
+   });
+   confirmPopup.then(function(res) {
+     if(res) {
+       $scope.deck.words.splice(wordIndex,wordIndex+1);
+      $ionicHistory.goBack();
+     }
+   });
+ }
+})
+
+
+
+.controller('CourseInfoCtrl',function($scope,$ionicPopup, $state,DeckService,$stateParams,$cordovaSQLite) {
+  //TODO: http://ionicframework.com/docs/api/directive/ionCheckbox/ -> add this to know
+  $scope.deck= DeckService.getDeckByName($stateParams.deckName);
+  $scope.DeckIndex=DeckService.getDeckIndex($scope.deck.name);
+  $scope.getLearnedCount=function(){
+    return DeckService.getLearnedCount($scope.deck.name);
+  }
+
   //set the right icon
   $scope.getIcon=function(know){
     if(know==false){
@@ -34,37 +90,66 @@ angular.module('starter.controllers', [])
       return "ion-android-checkmark-circle balanced";
     }
   };
-  
-  
+
+  //deletes the deck
+  $scope.showConfirm = function() {
+    var confirmPopup = $ionicPopup.confirm({
+     title: 'Delete Deck',
+     template: 'Are you sure?'
+   });
+   confirmPopup.then(function(res) {
+     if(res) {
+       DeckService.all().splice($scope.DeckIndex,$scope.DeckIndex+1);
+     }
+   });
+ }
+
+  //resetes all know states
+  $scope.refreshDeck=function(){
+    for (var i = 0; i < $scope.deck.words.length; i++) {
+      $scope.deck.words[i].know=false
+    };
+  }
 })
+
+
+
 .controller('CreateDeckCtrl',function($scope,$stateParams,DeckService) {
-  
+
   //creates empty deck with the right name and stores it in the DeckService
   $scope.onSaveDeck = function(){
     var deck={
       name:this.DeckName,
       words: new Array()//creates empty array template
-
     }
     DeckService.add(deck);
-
   }
 
-  
+
 })
+
+
+
 .controller('AddCardsCtrl',function($scope,$state,$ionicHistory,$stateParams,DeckService) {
   //function to go to the next view without a back button -> nice  approach :D
   $scope.deckName=$stateParams.addCards
+  console.log($stateParams);
+
   $scope.closeDeck=function(){
-    $ionicHistory.nextViewOptions({
-      disableBack: true
-    });
-    $state.go("app.courses");
+    if($ionicHistory.backTitle()=="create new Deck"){
+      $ionicHistory.nextViewOptions({
+        disableBack: true,
+        disableAnimate:true
+      });
+      $state.go('app.courses');
+    }else{
+    $ionicHistory.goBack();
+
+    }
   }
 
-  
   //
-  $scope.currentDeck=DeckService.getByName($scope.deckName);
+  $scope.currentDeck=DeckService.getDeckByName($scope.deckName);
 
   $scope.addCard=function() {
     if(this.frontside!=null&&this.backside!=null){
@@ -76,47 +161,94 @@ angular.module('starter.controllers', [])
       $scope.currentDeck.words.push(word);
       console.log($scope.currentDeck);
       DeckService.update($scope.deckName,$scope.currentDeck);
-      this.frontside.text=null;                
+      this.frontside.text=null;
       this.backside.text=null;
-      this.frontside=null;                
+      this.frontside=null;
       this.backside=null;
     }
   }
-
-  
-
-  
 })
-.controller('CardQueryCtrl',function($scope,$stateParams,$ionicPopover,DeckService){ 
-  $scope.deck= DeckService.getByName($stateParams.cardQuery);
-  $scope.currentCard=1;//current card
-  $scope.cardCount=$scope.deck.words.length;//counts of the cards in the Deck
-  $scope.displayWord=$scope.deck.words[$scope.currentCard-1].frontside;
+
+
+
+.controller('CardQueryCtrl',function($scope,$stateParams,$state,$ionicPopover,DeckService){
+  //TODO return the mulitble states, ex learn etc
+  var param = $stateParams.cardQuery.split("-");
+  var DeckName = param[0];
+  var DeckState= param[1]; //0-> all; 1-> learned; 2-> to learn
+  $scope.names=param[0];
+  $scope.deck= DeckService.getDeckByName(param[0]);
   $scope.done=false;
+  $scope.index = 0;
 
-  var currentSide="frontside";
-  $scope.onSwitch=function(){ //funktion when to turn the card
-    if(!$scope.done){
-      if(currentSide=="frontside"){
-        currentSide="backside";
-        $scope.displayWord=$scope.deck.words[$scope.currentCard-1].backside;
-        if($scope.currentCard==$scope.cardCount){
-          $scope.done=true;
+
+  $scope.getWords = function(){ //function die die richtigen wörter auswählt
+    if(DeckState==0){
+      return $scope.deck.words;
+    }else if (DeckState==1) {
+      var selectedWords=[];
+      for (var i = 0; i < $scope.deck.words.length; i++) {
+        if($scope.deck.words[i].know==true){
+          selectedWords.push($scope.deck.words[i]);
         }
-      }else{
-        currentSide="frontside";
-        $scope.currentCard++;
-        $scope.displayWord=$scope.deck.words[$scope.currentCard-1].frontside;
       }
+      return selectedWords;
+    }else if (DeckState==2) {
+      var selectedWords=[];
+      for (var i = 0; i < $scope.deck.words.length; i++) {
+        if($scope.deck.words[i].know==false){
+          selectedWords.push($scope.deck.words[i]);
+        }
+      }
+      return selectedWords;
     }
+  }
+  $scope.currentSelectedWords=$scope.getWords();
+  $scope.currentCard =$scope.currentSelectedWords[$scope.index];
+  $scope.showBothSides=true; //immer das gegenteil von dem was gerade gezeigt wird
+  $scope.shuffle=false;
 
-  };
+
+  $scope.changeKnow= function(){
+    if($scope.currentCard.know==true){
+      $scope.currentCard.know=false;
+    }else{
+      $scope.currentCard.know=true;
+    }
+  }
+
+  $scope.getKnowColor=function(){
+    if($scope.currentCard.know==true){
+      return "button-balanced";
+    }else{
+      return "button-outline ";
+    }
+  }
+  //functions gets called when you slide,
+  //sets the index and resets the bottom card
+  $scope.slideChanged=function(index){
+    $scope.showBothSides=true;
+    $scope.index = index;
+    $scope.currentCard = $scope.currentSelectedWords[$scope.index];
+
+  }
+
+  $scope.showBack=function(){
+    if($scope.showBothSides){
+      $scope.showBothSides=false;
+    }else{
+      $scope.showBothSides=true;
+    }
+  }
+
+
   //popover
    $ionicPopover.fromTemplateUrl('/templates/queryPopover.html', {
     scope: $scope
   }).then(function(popover) {
     $scope.popover = popover;
   });
+
   //popover functions for shuffle switch edit and delete
   $scope.shuffleCards=function() {
     $scope.popover.hide();
@@ -124,12 +256,6 @@ angular.module('starter.controllers', [])
   $scope.switchCards=function() {
     $scope.popover.hide();
   }
-  $scope.editCard=function() {
-    $scope.popover.hide();
-  }
-  $scope.deleteCard=function() {
-    $scope.popover.hide();
-  }  
 
   //normal popover function, called to close and hide the popover.
   $scope.openPopover = function($event) {
@@ -150,8 +276,4 @@ angular.module('starter.controllers', [])
   $scope.$on('popover.removed', function() {
     // Execute action
   });
-
-
-  
 });
-
