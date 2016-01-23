@@ -1,6 +1,7 @@
-<ion-view view-title="{{deck.name}}">
+<ion-view view-title="{{deck.name}} {{index+1}}/{{currentSelectedWords.length}}">
 <ion-nav-buttons side="right">
-	<button class="button button-icon icon ion-android-settings" ng-click="openPopover($event)"></button>
+	<button class="button button-icon icon ion-android-sync" ng-click="switchCards()"></button>
+	<button class="button button-icon icon icon ion-shuffle" ng-click="shuffleCards()"></button>
 </ion-nav-buttons>
 <ion-content class="padding">
 	<ion-slide-box class="padding" on-slide-changed="slideChanged(index)" ng-click="showBack()">
@@ -12,6 +13,7 @@
 			</div>
 			<div class="card animated fadeInLeft" style="padding-top: 15%" ng-hide="showBothSides">
 	  		<div class="item item-text-wrap " >
+					{{cardBottom}}
 	  		</div>
 			</div>
 		</ion-slide>

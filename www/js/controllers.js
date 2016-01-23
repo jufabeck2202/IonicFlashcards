@@ -173,7 +173,7 @@ angular.module('starter.controllers', [])
 
 
 
-.controller('CardQueryCtrl',function($scope,$stateParams,$state,$ionicPopover,DeckService){
+.controller('CardQueryCtrl',function($scope,$stateParams,$state,DeckService){
   //TODO return the mulitble states, ex learn etc
   var param = $stateParams.cardQuery.split("-");
   var DeckName = param[0];
@@ -272,20 +272,35 @@ angular.module('starter.controllers', [])
     }
   }
 
-
-  //popover
-   $ionicPopover.fromTemplateUrl('/templates/queryPopover.html', {
-    scope: $scope
-  }).then(function(popover) {
-    $scope.popover = popover;
-  });
-
   //popover functions for shuffle switch edit and delete
   $scope.shuffleCards=function() {
-    $scope.popover.hide();
+    for (var i = $scope.currentSelectedWords.length-1; i >=0; i--) {
+      $scope.currentSelectedWords[i].pos=null;
+    }
+
+    var size = $scope.currentSelectedWords.length;
+    Math.floor((Math.random() * $scope.currentSelectedWords.length));
+    var tempIndex=0;
+
+    while(tempIndex<size){
+      var value = Math.floor((Math.random() * $scope.currentSelectedWords.length));
+      var alreadyIn = false;
+      for (var i = 0; i < size; i++) {
+        if($scope.currentSelectedWords[i].pos==value){
+          alreadyIn=true;
+        }
+      }
+      if(!alreadyIn){
+        $scope.currentSelectedWords[tempIndex].pos=value;
+        tempIndex++;
+      }
+    }
+    $scope.showBothSides=true;
+    $scope.currentCard = $scope.posHandler($scope.index);
+    setWords();
   }
+
   $scope.switchCards=function() {
-    $scope.popover.hide();
     if($scope.switch){
       $scope.switch=false;
     }else{
@@ -294,23 +309,4 @@ angular.module('starter.controllers', [])
     setWords()
   }
 
-  //normal popover function, called to close and hide the popover.
-  $scope.openPopover = function($event) {
-    $scope.popover.show($event);
-  };
-  $scope.closePopover = function() {
-    $scope.popover.hide();
-  };
-  //Cleanup the popover when we're done with it!
-  $scope.$on('$destroy', function() {
-    $scope.popover.remove();
-  });
-  // Execute action on hide popover
-  $scope.$on('popover.hidden', function() {
-    // Execute action
-  });
-  // Execute action on remove popover
-  $scope.$on('popover.removed', function() {
-    // Execute action
-  });
 });
