@@ -49,14 +49,16 @@ angular.module('starter.controllers', [])
       };
     };
   }
- var word=getWord();
-  $scope.frontside=word.frontside;
-  $scope.backside=word.backside;
+ $scope.word=getWord();
+ $scope.frontside=$scope.word.frontside;
+ $scope.backside=$scope.word.backside;
+
 
 
   $scope.save=function(){
     $scope.deck.words[wordIndex].frontside=this.frontside;
     $scope.deck.words[wordIndex].backside=this.backside;
+
   }
   $scope.showConfirm = function() {
    var confirmPopup = $ionicPopup.confirm({
@@ -309,4 +311,9 @@ angular.module('starter.controllers', [])
     setWords()
   }
 
+})
+.controller('AboutCtrl',function($scope,$stateParams,$state,DeckService){
+  $scope.twitter=function(){
+    window.open('http://apache.org', '_blank', 'location=yes');
+  }
 });

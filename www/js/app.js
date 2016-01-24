@@ -106,6 +106,15 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
         }
       }
     })
+    .state('app.about', {
+      url: '/about',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/about.html',
+          controller: "AboutCtrl"
+        }
+      }
+    })
     .state('app.cardQuery', {
       url: '/courses/:deckName/:cardQuery',
       views: {
