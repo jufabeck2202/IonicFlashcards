@@ -28,11 +28,11 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
     var decks=[{
       name:"TestDeck",
       words:[
-      {frontside:"karte1",backside:"card1",know:true,pos:null},
-      {frontside:"karte2",backside:"card2",know:false,pos:null},
-      {frontside:"karte3",backside:"card3",know:false,pos:null},
-      {frontside:"karte4",backside:"card4",know:false,pos:null},
-      {frontside:"karte5",backside:"card5",know:false,pos:null}]
+      {frontside:"karte1",backside:"card1",know:true,pos:1},
+      {frontside:"karte2",backside:"card2",know:false,pos:3},
+      {frontside:"karte3",backside:"card3",know:false,pos:4},
+      {frontside:"karte4",backside:"card4",know:false,pos:2},
+      {frontside:"karte5",backside:"card5",know:false,pos:0}]
 
     }];
     return{
@@ -103,6 +103,15 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova'])
         'menuContent': {
           templateUrl: 'templates/courses.html',
           controller: 'CourseCtrl'
+        }
+      }
+    })
+    .state('app.about', {
+      url: '/about',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/about.html',
+          controller: "AboutCtrl"
         }
       }
     })
