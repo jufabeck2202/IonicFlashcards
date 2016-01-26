@@ -1,43 +1,39 @@
 <ion-view view-title="{{deck.name}}">
- <ion-content>
-  	<div class="list">
+  <ion-content>
+    <div class="list">
       <div class="button-bar">
-      		<a class="button button-balanced"
-      		href="#/app/courses/{{deck.name}}/{{deck
+        <a class="button button-balanced" href="#/app/courses/{{deck.name}}/{{deck
           .name}}-0">All-{{deck.words.length}}</a>
-      		<a class="button button-balanced" href="#/app/courses/{{deck.name}}/{{deck.name}}-1">
-      			Learned-{{getLearnedCount()}}/{{deck.words.length}}</a>
-      		<a class="button button-balanced"href="#/app/courses/{{deck.name}}/{{deck.name}}-2" >to learn</a>
-    	</div>
+        <a class="button button-balanced" href="#/app/courses/{{deck.name}}/{{deck.name}}-1">
+          Learned-{{getLearnedCount()}}/{{deck.words.length}}</a>
+        <a class="button button-balanced" href="#/app/courses/{{deck.name}}/{{deck.name}}-2">to learn</a>
+      </div>
 
-  		<ion-item class = "item-icon-left" ng-repeat="word in deck.words" href="#/app/courses/{{deck.name}}/{{deck.name}}/{{word.frontside}}">
-  		 <i class="icon {{getIcon(word.know)}}"></i>
-  			<h2>{{word.frontside}}</h2>
-      		<p>{{word.backside}}</p>
+      <ion-item class="item-icon-left" ng-repeat="word in deck.words" href="#/app/courses/{{deck.name}}/{{deck.name}}/{{word.frontside}}">
+        <i class="icon {{getIcon(word.know)}}"></i>
+        <h2>{{word.frontside}}</h2>
+        <p>{{word.backside}}</p>
 
-  		</ion-item>
+      </ion-item>
+      <ion-item></ion-item>
 
-  	</div>
+    </div>
 
-
-
-
-
-</ion-content>
-<div class="bar bar-footer">
-		<div class="tabs tabs-icon-left">
-  <a class="tab-item" href="#/app/createDeck/{{deck.name}}">
-   	<i class="icon ion-android-add"></i>
-    add Card
-  </a>
-  <a class="tab-item" ng-click="refreshDeck()">
-    <i class="icon ion-android-refresh"></i>
-    Reset
-  </a>
-  <a class="tab-item" ng-click ="showConfirm()">
-    <i class="icon ion-trash-b assertive"></i>
-    Delete Deck
-  </a>
-</div>
-	</div>
+  </ion-content>
+  <div class="bar bar-footer">
+    <div class="tabs tabs-icon-left">
+      <a class="tab-item" href="#/app/createDeck/{{deck.name}}">
+        <i class="icon ion-android-add"></i>
+        add Card
+      </a>
+      <a class="tab-item" ng-click="refreshDeck()">
+        <i class="icon ion-android-refresh"></i>
+        Reset
+      </a>
+      <a class="tab-item" ng-click="showConfirm()">
+        <i class="icon ion-trash-b assertive"></i>
+        Delete Deck
+      </a>
+    </div>
+  </div>
 </ion-view>

@@ -15,8 +15,9 @@ angular.module('starter.controllers', [])
     };
 })
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
-
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, DeckService) {
+  $scope.decks = DeckService.all();
+    $scope.DeckService =DeckService;
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -30,12 +31,11 @@ angular.module('starter.controllers', [])
 
 .controller('CourseCtrl',function($scope,DeckService) {
   $scope.decks = DeckService.all();
-
 })
 
 
 
-.controller('EditCardCtrl',function($ionicHistory,$ionicPopup,$scope,DeckService ,$stateParams ,$state) {
+.controller('EditCardCtrl',function($ionicHistory, $ionicPopup, $scope, DeckService ,$stateParams ,$state) {
   //TODO change know state
   $scope.Deckname = $stateParams.deckName;
   $scope.cardFrontside=$stateParams.cardname;
@@ -314,6 +314,9 @@ angular.module('starter.controllers', [])
 })
 .controller('AboutCtrl',function($scope,$stateParams,$state,DeckService){
   $scope.twitter=function(){
-    window.open('http://twitter.com/Kickbeak', '_blank', 'location=yes');
+    window.open('http://twitter.com/Kickbeak', '_system', 'location=yes');
+  }
+  $scope.github=function(){
+    window.open('https://github.com/jufabeck2202/IonicFlashcards', '_system', 'location=yes');
   }
 });
