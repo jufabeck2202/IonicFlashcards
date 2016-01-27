@@ -1,13 +1,10 @@
 <ion-view view-title="{{deck.name}}">
+
   <ion-content>
+    <div class="button-bar">
+      <button class="button button-balanced" ng-click="openPopover($event)">Start Learning!</button>
+    </div>
     <div class="list">
-      <div class="button-bar">
-        <a class="button button-balanced" href="#/app/courses/{{deck.name}}/{{deck
-          .name}}-0">All-{{deck.words.length}}</a>
-        <a class="button button-balanced" href="#/app/courses/{{deck.name}}/{{deck.name}}-1">
-          Learned-{{getLearnedCount()}}/{{deck.words.length}}</a>
-        <a class="button button-balanced" href="#/app/courses/{{deck.name}}/{{deck.name}}-2">to learn</a>
-      </div>
 
       <ion-item class="item-icon-left" ng-repeat="word in deck.words" href="#/app/courses/{{deck.name}}/{{deck.name}}/{{word.frontside}}">
         <i class="icon {{getIcon(word.know)}}"></i>
