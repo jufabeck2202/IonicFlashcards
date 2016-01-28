@@ -56,6 +56,7 @@ angular.module('starter.controllers', [])
   $scope.save = function() {
     $scope.deck.words[wordIndex].frontside = this.frontside;
     $scope.deck.words[wordIndex].backside = this.backside;
+    DeckService.saveDeck();
 
   }
   $scope.showConfirm = function() {
@@ -66,6 +67,7 @@ angular.module('starter.controllers', [])
     confirmPopup.then(function(res) {
       if (res) {
         $scope.deck.words.splice(wordIndex, wordIndex + 1);
+        DeckService.saveDeck();
         $ionicHistory.goBack();
       }
     });
@@ -74,7 +76,7 @@ angular.module('starter.controllers', [])
 
 
 
-.controller('CourseInfoCtrl', function($scope, $ionicPopup, $ionicPopover, $state, DeckService, $stateParams, $cordovaSQLite) {
+.controller('CourseInfoCtrl', function($scope, $ionicHistory,$ionicPopup, $ionicPopover, $state, DeckService, $stateParams, $cordovaSQLite) {
   $scope.deck = DeckService.getDeckByName($stateParams.deckName);
   $scope.DeckIndex = DeckService.getDeckIndex($scope.deck.name);
 
@@ -100,6 +102,11 @@ angular.module('starter.controllers', [])
     confirmPopup.then(function(res) {
       if (res) {
         DeckService.all().splice($scope.DeckIndex, $scope.DeckIndex + 1);
+        DeckService.saveDeck();
+        $ionicHistory.nextViewOptions({
+          disableBack: true,
+          disableAnimate: true
+        });
         $state.go("app.courses");
       }
     });
@@ -110,6 +117,7 @@ angular.module('starter.controllers', [])
     for (var i = 0; i < $scope.deck.words.length; i++) {
       $scope.deck.words[i].know = false
     };
+    DeckService.saveDeck();
   }
 
   $scope.allLearned = function() {
@@ -152,9 +160,10 @@ angular.module('starter.controllers', [])
   $scope.onSaveDeck = function() {
     var deck = {
       name: this.DeckName,
-      words: new Array() //creates empty array template
+      words: new Array () //creates empty array template
     }
     DeckService.add(deck);
+    DeckService.saveDeck();
   }
 
 
@@ -271,8 +280,10 @@ angular.module('starter.controllers', [])
     $scope.changeKnow = function() {
       if ($scope.currentCard.know == true) {
         $scope.currentCard.know = false;
+        DeckService.saveDeck();
       } else {
         $scope.currentCard.know = true;
+        DeckService.saveDeck();
       }
     }
 

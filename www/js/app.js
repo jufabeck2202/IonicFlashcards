@@ -24,8 +24,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
     });
   })
   .factory("DeckService", function() {
-
-    var decks = [{
+    var testDeck = [{
       name: "TestDeck",
       words: [{
         frontside: "karte1",
@@ -52,11 +51,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
         backside: "card5",
         know: false,
         pos: 0
-      }]
-
+      }],
     }];
+
+    if (!localStorage["stor"]) {
+
+      localStorage["stor"] = JSON.stringify(testDeck);
+    }
+    console.log("loaded");
+    var decks = JSON.parse(window.localStorage['stor'] || '{}');
+
+    function save () {
+      console.log("save");
+      localStorage["stor"] = JSON.stringify(decks);
+    }
+
     return {
       all: function() {
+        save();
         return decks;
 
       },
@@ -68,14 +80,20 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
           if (decks[i].name == deckname) {
             decks.splice(i);
             decks.push(deck);
+            save();
             break;
           };
         };
       },
       //returns deck with the given name
+      saveDeck:function(){
+        console.log("save");
+        localStorage["stor"] = JSON.stringify(decks);
+      },
       getDeckByName: function(name) {
         for (var i = decks.length - 1; i >= 0; i--) {
           if (decks[i].name == name) {
+            save();
             return decks[i]
           };
         };
