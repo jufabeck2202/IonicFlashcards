@@ -55,6 +55,14 @@ module.exports = [
             "cordova.InAppBrowser.open",
             "window.open"
         ]
+    },
+    {
+        "file": "plugins/com.smartmobilesoftware.androidinappbilling/www/inappbilling.js",
+        "id": "com.smartmobilesoftware.androidinappbilling.InAppBillingPlugin",
+        "pluginId": "com.smartmobilesoftware.androidinappbilling",
+        "clobbers": [
+            "inappbilling"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -67,7 +75,8 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.2.0",
     "cordova-sqlite-storage": "0.7.15-pre",
     "ionic-plugin-keyboard": "1.0.8",
-    "cordova-plugin-inappbrowser": "1.2.1-dev"
+    "cordova-plugin-inappbrowser": "1.2.1-dev",
+    "com.smartmobilesoftware.androidinappbilling": "3.0.2"
 }
 // BOTTOM OF METADATA
 });

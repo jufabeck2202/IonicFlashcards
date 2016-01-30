@@ -158,6 +158,7 @@ angular.module('starter.controllers', [])
 
   //creates empty deck with the right name and stores it in the DeckService
   $scope.onSaveDeck = function() {
+    //TODO check if similar deck exists
     var deck = {
       name: this.DeckName,
       words: new Array () //creates empty array template
@@ -193,6 +194,7 @@ angular.module('starter.controllers', [])
   $scope.currentDeck = DeckService.getDeckByName($scope.deckName);
 
   $scope.addCard = function() {
+    //TODO check if similar card exists
     if (this.frontside != null && this.backside != null) {
       var word = {
         frontside: this.frontside.text,

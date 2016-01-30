@@ -30,6 +30,10 @@
         },
         "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "com.ionicframework.flashcards228577"
+        },
+        "com.smartmobilesoftware.androidinappbilling": {
+            "BILLING_KEY": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhwFlhtiA2kaRbI8/6JleR7ZQPeIg2/JljiqaZgH42X+cj/+UKfGgXlZTPaHR4opvMTpd82Hoe6FsYVfwd1jxbcmehlQMg7Cf4nulMF5iIux1KRZQD3j05fUBTQY7E9k4F8hLlYyo5TznbWdynpvy9RXWzyt2Rbd7YPKTUI6Dwd6FJmLAoQi8ibjvxcZpjT/zbBIorfidl+KnLEibCtNVZ6EBXNftzbBlgKRJSqUJwD5X9Y8yaIXcFuz5LmxRXid/ZN9JAVhZjN4Tp2UyneIJIkO9SWvelcXpxVKbHhrmD69kGYg3F5yMeoZJyUiNP+dBTBIBBRK69dPX+sFldXtCOQIDAQAB",
+            "PACKAGE_NAME": "com.ionicframework.flashcards228577"
         }
     },
     "dependent_plugins": {}

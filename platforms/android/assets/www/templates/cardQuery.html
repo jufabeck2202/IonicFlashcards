@@ -4,7 +4,7 @@
     <button class="button button-icon icon icon ion-shuffle" ng-click="shuffleCards()"></button>
   </ion-nav-buttons>
   <ion-content class="padding">
-    <ion-slide-box class="padding" on-slide-changed="slideChanged(index)" ng-click="showBack()">
+    <ion-slide-box show-pager="false" class="padding" on-slide-changed="slideChanged(index)" ng-click="showBack()">
       <ion-slide ng-repeat="word in currentSelectedWords">
         <div class="card">
           <div class="item item-text-wrap">

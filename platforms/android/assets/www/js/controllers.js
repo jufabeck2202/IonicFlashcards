@@ -56,6 +56,7 @@ angular.module('starter.controllers', [])
   $scope.save = function() {
     $scope.deck.words[wordIndex].frontside = this.frontside;
     $scope.deck.words[wordIndex].backside = this.backside;
+    DeckService.saveDeck();
 
   }
   $scope.showConfirm = function() {
@@ -66,6 +67,7 @@ angular.module('starter.controllers', [])
     confirmPopup.then(function(res) {
       if (res) {
         $scope.deck.words.splice(wordIndex, wordIndex + 1);
+        DeckService.saveDeck();
         $ionicHistory.goBack();
       }
     });
@@ -74,7 +76,7 @@ angular.module('starter.controllers', [])
 
 
 
-.controller('CourseInfoCtrl', function($scope, $ionicPopup, $ionicPopover, $state, DeckService, $stateParams, $cordovaSQLite) {
+.controller('CourseInfoCtrl', function($scope, $ionicHistory,$ionicPopup, $ionicPopover, $state, DeckService, $stateParams, $cordovaSQLite) {
   $scope.deck = DeckService.getDeckByName($stateParams.deckName);
   $scope.DeckIndex = DeckService.getDeckIndex($scope.deck.name);
 
@@ -100,6 +102,11 @@ angular.module('starter.controllers', [])
     confirmPopup.then(function(res) {
       if (res) {
         DeckService.all().splice($scope.DeckIndex, $scope.DeckIndex + 1);
+        DeckService.saveDeck();
+        $ionicHistory.nextViewOptions({
+          disableBack: true,
+          disableAnimate: true
+        });
         $state.go("app.courses");
       }
     });
@@ -110,22 +117,21 @@ angular.module('starter.controllers', [])
     for (var i = 0; i < $scope.deck.words.length; i++) {
       $scope.deck.words[i].know = false
     };
+    DeckService.saveDeck();
   }
 
-$scope.allLearned=function(){
-  if($scope.getLearnedCount()==$scope.deck.words.length){
-    return false
+  $scope.allLearned = function() {
+    if ($scope.getLearnedCount() == $scope.deck.words.length) {
+      return false
+    } else {
+      return true
+    }
   }
-  else{
-    return true
-  }
-}
-var popover='<ion-popover-view><ion-header-bar><h1 class="title">Select what words</h1></ion-header-bar><ion-content><a class="button button-full button-balanced" ng-click="closePopover()" href="#/app/courses/{{deck.name}}/{{deck.name}}-0">All-{{deck.words.length}}</a><a ng-show="getLearnedCount()" ng-click="closePopover()" class="button button-full button-balanced" href="#/app/courses/{{deck.name}}/{{deck.name}}-1">Learned-{{getLearnedCount()}}/{{deck.words.length}}</a><a ng-show="allLearned()" ng-click="closePopover()"class="button button-full button-balanced" href="#/app/courses/{{deck.name}}/{{deck.name}}-2">to learn</a></ion-content></ion-popover-view>';
-$scope.popover = $ionicPopover.fromTemplate(popover, {
+  //the Popover
+  var popover = '<ion-popover-view><ion-header-bar><h1 class="title">Select what words</h1></ion-header-bar><ion-content><a class="button button-full button-balanced" ng-click="closePopover()" href="#/app/courses/{{deck.name}}/{{deck.name}}-0">All-{{deck.words.length}}</a><a ng-show="getLearnedCount()" ng-click="closePopover()" class="button button-full button-balanced" href="#/app/courses/{{deck.name}}/{{deck.name}}-1">Learned-{{getLearnedCount()}}/{{deck.words.length}}</a><a ng-show="allLearned()" ng-click="closePopover()"class="button button-full button-balanced" href="#/app/courses/{{deck.name}}/{{deck.name}}-2">to learn-{{deck.words.length-getLearnedCount()}}/{{deck.words.length}}</a></ion-content></ion-popover-view>';
+  $scope.popover = $ionicPopover.fromTemplate(popover, {
     scope: $scope
   });
-
-
 
   $scope.openPopover = function($event) {
     $scope.popover.show($event);
@@ -154,9 +160,10 @@ $scope.popover = $ionicPopover.fromTemplate(popover, {
   $scope.onSaveDeck = function() {
     var deck = {
       name: this.DeckName,
-      words: new Array() //creates empty array template
+      words: new Array () //creates empty array template
     }
     DeckService.add(deck);
+    DeckService.saveDeck();
   }
 
 
@@ -206,7 +213,7 @@ $scope.popover = $ionicPopover.fromTemplate(popover, {
 
 
 
-.controller('CardQueryCtrl', function($scope, $stateParams, $state, DeckService) {
+.controller('CardQueryCtrl', function($scope,$stateParams, $state, DeckService) {
 
     var param = $stateParams.cardQuery.split("-");
     var DeckName = param[0];
@@ -273,8 +280,10 @@ $scope.popover = $ionicPopover.fromTemplate(popover, {
     $scope.changeKnow = function() {
       if ($scope.currentCard.know == true) {
         $scope.currentCard.know = false;
+        DeckService.saveDeck();
       } else {
         $scope.currentCard.know = true;
+        DeckService.saveDeck();
       }
     }
 
