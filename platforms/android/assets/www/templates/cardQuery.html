@@ -3,15 +3,17 @@
     <button class="button button-icon icon ion-android-sync" ng-click="switchCards()"></button>
     <button class="button button-icon icon icon ion-shuffle" ng-click="shuffleCards()"></button>
   </ion-nav-buttons>
-  <ion-content class="padding">
-    <ion-slide-box show-pager="false" class="padding" on-slide-changed="slideChanged(index)" ng-click="showBack()">
+  <ion-content class="padding has-footer">
+    <ion-slide-box show-pager="true" class="padding" on-slide-changed="slideChanged(index)" ng-click="showBack()">
       <ion-slide ng-repeat="word in currentSelectedWords">
-        <div class="card">
+        <div style="padding-top: 4%" ></div>
+       <div class="card">
           <div class="item item-text-wrap">
             {{cardTop}}
           </div>
         </div>
-        <div class="card animated fadeInLeft" style="padding-top: 15%" ng-hide="showBothSides">
+        <div style="padding-top: 7%" ></div>
+        <div class="card animated fadeIn" ng-hide="showBothSides">
           <div class="item item-text-wrap ">
             {{cardBottom}}
           </div>
