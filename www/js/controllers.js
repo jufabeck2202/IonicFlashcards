@@ -161,7 +161,7 @@ angular.module('starter.controllers', [])
 
     });
   };
-  $scope.alreadyInfunc = function(){
+  $scope.alreadyInfunc = function() {
     $scope.alreadyIn = false;
     for (var i = 0; i < DeckService.all().length; i++) {
       if (DeckService.all()[i].name == this.DeckName) {
@@ -189,7 +189,7 @@ angular.module('starter.controllers', [])
 
 
 
-.controller('AddCardsCtrl', function($scope, $state, $ionicHistory, $ionicPopup, $stateParams, DeckService) {
+.controller('AddCardsCtrl', function($scope, $state, $ionicHistory, $ionicPopup, $stateParams, DeckService, $ionicModal) {
   //function to go to the next view without a back button -> nice  approach :D
   $scope.deckName = $stateParams.addCards
   console.log($stateParams);
@@ -218,35 +218,64 @@ angular.module('starter.controllers', [])
   $scope.currentDeck = DeckService.getDeckByName($scope.deckName);
 
   $scope.addCard = function() {
-    var cardAlreadyIn = false;
-    for (var i = 0; i < $scope.currentDeck.words.length; i++) {
-      if (this.frontside != null) {
-        if (this.frontside.text == $scope.currentDeck.words[i].frontside) {
-          cardAlreadyIn = true;
+      var cardAlreadyIn = false;
+      for (var i = 0; i < $scope.currentDeck.words.length; i++) {
+        if (this.frontside != null) {
+          if (this.frontside.text == $scope.currentDeck.words[i].frontside) {
+            cardAlreadyIn = true;
+          }
         }
       }
-    }
 
-    if (cardAlreadyIn) {
-      $scope.showAlert();
-    }
+      if (cardAlreadyIn) {
+        $scope.showAlert();
+      }
 
-    if (!cardAlreadyIn && this.frontside != null && this.backside != null) {
-      var word = {
-        frontside: this.frontside.text,
-        backside: this.backside.text,
-        know: false,
-        pos: null
-      };
-      $scope.currentDeck.words.push(word);
-      console.log($scope.currentDeck);
-      DeckService.update($scope.deckName, $scope.currentDeck);
-      this.frontside.text = null;
-      this.backside.text = null;
-      this.frontside = null;
-      this.backside = null;
+      if (!cardAlreadyIn && this.frontside != null && this.backside != null) {
+        var word = {
+          frontside: this.frontside.text,
+          backside: this.backside.text,
+          know: false,
+          pos: null
+        };
+        $scope.currentDeck.words.push(word);
+        console.log($scope.currentDeck);
+        DeckService.update($scope.deckName, $scope.currentDeck);
+        this.frontside.text = null;
+        this.backside.text = null;
+        this.frontside = null;
+        this.backside = null;
+      }
     }
-  }
+    //modal stuff for multi add cards
+  var template = '<ion-modal-view> <ion-header-bar class="bar-royal"> <h1 class="title">bulk add words</h1> <button class="button button-icon icon ion-android-close" ng-click="closeModal()"></button> </ion-header-bar> <ion-content> <div class="card"> <div class="item item-text-wrap"> Quickly add lots of words. <br> To start a new card use " <strong>/</strong>" to switch to a new side use " <strong>:</strong>" spaces/Breaks dont matter. Example:<br> <strong>Frontside1:Backside1/</strong> <strong><br>Frontside2:Backside2/</strong> </div> </div><div class="row"> <div class="col"> <label class="item item-input text"> <textarea placeholder="Enter text" rows="18" ng-model="cardtext"></textarea> </label> </div> </div> <button class="button button-full button-royal" ng-click="bulkAdd()">bulk add</button></ion-content> </ion-modal-view>'
+  $scope.modal = $ionicModal.fromTemplate(template, {
+    scope: $scope,
+    animation: 'slide-in-up'
+  });
+  $scope.openModal = function() {
+    $scope.modal.show();
+  };
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+  //Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+  // Execute action on hide modal
+  $scope.$on('modal.hidden', function() {
+    // Execute action
+  });
+  // Execute action on remove modal
+  $scope.$on('modal.removed', function() {
+    // Execute action
+  })
+  $scope.bulkAdd = function() {
+    $scope.modal.hide();
+  };
+
+
 })
 
 
