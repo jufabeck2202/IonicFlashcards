@@ -1,13 +1,16 @@
 <ion-view view-title="{{deck.name}}">
-  <href class="bar bar-balanced bar-subheader" ng-click="openPopover($event)">
 
-    <h2 class="title">Start Learning!</h2>
-    </href>
-
-  <ion-content class="has-subheader has-footer">
-
+  <ion-content class="has-footer">
 
     <div class="list">
+      <ion-item>
+        <button class="button button-royal button-block" ng-click="openPopover($event)">
+
+          <i class="icon ion-university"></i>
+          Start Learning!
+        </button>
+
+      </ion-item>
 
       <ion-item class="item-icon-left" ng-repeat="word in deck.words" href="#/app/courses/{{deck.name}}/{{deck.name}}/{{word.frontside}}">
         <i class="icon {{getIcon(word.know)}}"></i>

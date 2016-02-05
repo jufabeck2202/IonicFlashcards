@@ -1,4 +1,12 @@
 {
   "name": "flashcards",
-  "app_id": "3f9de941"
+  "app_id": "3f9de941",
+  "gulpStartupTasks": [
+    "sass",
+    "watch"
+  ],
+  "watchPatterns": [
+    "www/**/*",
+    "!www/lib/**/*"
+  ]
 }

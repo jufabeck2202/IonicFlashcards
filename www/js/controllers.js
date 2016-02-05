@@ -128,7 +128,7 @@ angular.module('starter.controllers', [])
       }
     }
     //the Popover
-  var popover = '<ion-popover-view><ion-header-bar><h1 class="title">Select what words</h1></ion-header-bar><ion-content><a class="button button-full button-balanced" ng-click="closePopover()" href="#/app/courses/{{deck.name}}/{{deck.name}}-0">All-{{deck.words.length}}</a><a ng-show="getLearnedCount()" ng-click="closePopover()" class="button button-full button-balanced" href="#/app/courses/{{deck.name}}/{{deck.name}}-1">Learned-{{getLearnedCount()}}/{{deck.words.length}}</a><a ng-show="allLearned()" ng-click="closePopover()"class="button button-full button-balanced" href="#/app/courses/{{deck.name}}/{{deck.name}}-2">to learn-{{deck.words.length-getLearnedCount()}}/{{deck.words.length}}</a></ion-content></ion-popover-view>';
+  var popover = '<ion-popover-view><ion-header-bar><h1 class="title">Select what words</h1></ion-header-bar><ion-content><a class="button button-block button-royal" ng-click="closePopover()" href="#/app/courses/{{deck.name}}/{{deck.name}}-0">All-{{deck.words.length}}</a><a ng-show="getLearnedCount()" ng-click="closePopover()" class="button button-block button-royal" href="#/app/courses/{{deck.name}}/{{deck.name}}-1">Learned-{{getLearnedCount()}}/{{deck.words.length}}</a><a ng-show="allLearned()" ng-click="closePopover()"class="button button-block button-royal" href="#/app/courses/{{deck.name}}/{{deck.name}}-2">to learn-{{deck.words.length-getLearnedCount()}}/{{deck.words.length}}</a></ion-content></ion-popover-view>';
   $scope.popover = $ionicPopover.fromTemplate(popover, {
     scope: $scope
   });
@@ -173,7 +173,7 @@ angular.module('starter.controllers', [])
   }
 
   //creates empty deck with the right name and stores it in the DeckService
-  $scope.onSaveDeck = function() {    
+  $scope.onSaveDeck = function() {
     if (!$scope.alreadyIn) {
       var deck = {
         name: this.DeckName,

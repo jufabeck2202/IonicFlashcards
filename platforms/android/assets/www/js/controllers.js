@@ -128,7 +128,7 @@ angular.module('starter.controllers', [])
       }
     }
     //the Popover
-  var popover = '<ion-popover-view><ion-header-bar><h1 class="title">Select what words</h1></ion-header-bar><ion-content><a class="button button-full button-balanced" ng-click="closePopover()" href="#/app/courses/{{deck.name}}/{{deck.name}}-0">All-{{deck.words.length}}</a><a ng-show="getLearnedCount()" ng-click="closePopover()" class="button button-full button-balanced" href="#/app/courses/{{deck.name}}/{{deck.name}}-1">Learned-{{getLearnedCount()}}/{{deck.words.length}}</a><a ng-show="allLearned()" ng-click="closePopover()"class="button button-full button-balanced" href="#/app/courses/{{deck.name}}/{{deck.name}}-2">to learn-{{deck.words.length-getLearnedCount()}}/{{deck.words.length}}</a></ion-content></ion-popover-view>';
+  var popover = '<ion-popover-view><ion-header-bar><h1 class="title">Select what words</h1></ion-header-bar><ion-content><a class="button button-bar button-royal" ng-click="closePopover()" href="#/app/courses/{{deck.name}}/{{deck.name}}-0">All-{{deck.words.length}}</a><a ng-show="getLearnedCount()" ng-click="closePopover()" class="button button-bar button-royal" href="#/app/courses/{{deck.name}}/{{deck.name}}-1">Learned-{{getLearnedCount()}}/{{deck.words.length}}</a><a ng-show="allLearned()" ng-click="closePopover()"class="button button-bar button-royal" href="#/app/courses/{{deck.name}}/{{deck.name}}-2">to learn-{{deck.words.length-getLearnedCount()}}/{{deck.words.length}}</a></ion-content></ion-popover-view>';
   $scope.popover = $ionicPopover.fromTemplate(popover, {
     scope: $scope
   });
@@ -154,17 +154,34 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('CreateDeckCtrl', function($scope, $stateParams, DeckService) {
+.controller('CreateDeckCtrl', function($scope, $stateParams, DeckService, $ionicPopup) {
+  $scope.showAlert = function() {
+    var alertPopup = $ionicPopup.alert({
+      title: 'Deck already exists',
+
+    });
+  };
+  $scope.alreadyInfunc = function(){
+    $scope.alreadyIn = false;
+    for (var i = 0; i < DeckService.all().length; i++) {
+      if (DeckService.all()[i].name == this.DeckName) {
+        $scope.alreadyIn = true;
+        //$scope.showAlert();
+        break;
+      }
+    }
+  }
 
   //creates empty deck with the right name and stores it in the DeckService
   $scope.onSaveDeck = function() {
-    //TODO check if similar deck exists
-    var deck = {
-      name: this.DeckName,
-      words: new Array() //creates empty array template
+    if (!$scope.alreadyIn) {
+      var deck = {
+        name: this.DeckName,
+        words: new Array() //creates empty array template
+      }
+      DeckService.add(deck);
+      DeckService.saveDeck();
     }
-    DeckService.add(deck);
-    DeckService.saveDeck();
   }
 
 
@@ -176,6 +193,13 @@ angular.module('starter.controllers', [])
   //function to go to the next view without a back button -> nice  approach :D
   $scope.deckName = $stateParams.addCards
   console.log($stateParams);
+
+  $scope.showAlert = function() {
+    var alertPopup = $ionicPopup.alert({
+      title: 'card already exists',
+
+    });
+  };
 
   $scope.closeDeck = function() {
     if ($ionicHistory.backTitle() == "create new Deck") {
@@ -194,49 +218,35 @@ angular.module('starter.controllers', [])
   $scope.currentDeck = DeckService.getDeckByName($scope.deckName);
 
   $scope.addCard = function() {
-    //TODO check if similar card exists
     var cardAlreadyIn = false;
     for (var i = 0; i < $scope.currentDeck.words.length; i++) {
       if (this.frontside != null) {
         if (this.frontside.text == $scope.currentDeck.words[i].frontside) {
           cardAlreadyIn = true;
-
-
         }
       }
     }
 
     if (cardAlreadyIn) {
-      $scope.showAlert = function() {
-        var alertPopup = $ionicPopup.alert({
-          title: 'Don\'t eat that!',
-          template: 'It might taste good'
-        });
+      $scope.showAlert();
+    }
 
-        alertPopup.then(function(res) {
-          console.log('Thank you for not eating my delicious ice cream cone');
-        });
+    if (!cardAlreadyIn && this.frontside != null && this.backside != null) {
+      var word = {
+        frontside: this.frontside.text,
+        backside: this.backside.text,
+        know: false,
+        pos: null
       };
-  
-
-}
-
-if (!cardAlreadyIn && this.frontside != null && this.backside != null) {
-  var word = {
-    frontside: this.frontside.text,
-    backside: this.backside.text,
-    know: false,
-    pos: null
-  };
-  $scope.currentDeck.words.push(word);
-  console.log($scope.currentDeck);
-  DeckService.update($scope.deckName, $scope.currentDeck);
-  this.frontside.text = null;
-  this.backside.text = null;
-  this.frontside = null;
-  this.backside = null;
-}
-}
+      $scope.currentDeck.words.push(word);
+      console.log($scope.currentDeck);
+      DeckService.update($scope.deckName, $scope.currentDeck);
+      this.frontside.text = null;
+      this.backside.text = null;
+      this.frontside = null;
+      this.backside = null;
+    }
+  }
 })
 
 

@@ -14,10 +14,20 @@ $assertive:                       #ef473a !default;
 $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
-
+$energized:                       #2EAE62!default;//color for top
+$royal:                           #06B24B  !default;
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
+.slider {
+  height: 100%;
+}
 
+
+.slider-slide {
+
+  text-align: center;
+
+}
