@@ -272,6 +272,36 @@ angular.module('starter.controllers', [])
     // Execute action
   })
   $scope.bulkAdd = function() {
+    if (this.cardtext != null) {
+      var text = this.cardtext;
+      var words = text.split("/");
+
+      for (var i = 0; i < words.length; i++) {
+        var sides = words[i].split(":");
+        var fside = sides[0];
+        var bside = sides[1];
+
+        var cardAlreadyIn = false;
+        for (var i = 0; i < $scope.currentDeck.words.length; i++) {
+          if (this.frontside != null) {
+            if (this.frontside.text == $scope.currentDeck.words[i].frontside) {
+              cardAlreadyIn = true;
+            }
+          }
+        }
+        if (!cardAlreadyIn && fside !== null && bside !== null) {
+          var word = {
+            frontside: fside,
+            backside: bside,
+            know: false,
+            pos: null
+          };
+          $scope.currentDeck.words.push(word);
+          DeckService.update($scope.deckName, $scope.currentDeck);
+        }
+      }
+    }
+
     $scope.modal.hide();
   };
 
